@@ -11,6 +11,7 @@ namespace MarsFramework.Pages
             PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
         }
 
+        #region Initialize WebElements
         //Click on Manage Listings Link
         [FindsBy(How = How.LinkText, Using = "Manage Listings")]
         private IWebElement manageListingsLink { get; set; }
@@ -20,16 +21,26 @@ namespace MarsFramework.Pages
         private IWebElement view { get; set; }
 
         //Delete the listing
-        [FindsBy(How = How.XPath, Using = "//table[1]/tbody[1]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[8]/div/button[3]")]
         private IWebElement delete { get; set; }
 
         //Edit the listing
-        [FindsBy(How = How.XPath, Using = "(//i[@class='outline write icon'])[1]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[8]/div/button[2]")]
         private IWebElement edit { get; set; }
 
         //Click on Yes or No
         [FindsBy(How = How.XPath, Using = "//div[@class='actions']")]
         private IWebElement clickActionsButton { get; set; }
+
+        //Alert "Yes" Button
+        [FindsBy(How = How.XPath, Using = "/html/body/div[2]/div/div[3]/button[2]")]
+        private IWebElement YesBtn { get; set; }
+
+        //Alert "No" Button
+        [FindsBy(How = How.XPath, Using = "/html/body/div[2]/div/div[3]/button[1]")]
+        private IWebElement NoBtn { get; set; }
+
+        #endregion
 
         internal void Listings()
         {
@@ -38,5 +49,17 @@ namespace MarsFramework.Pages
 
 
         }
+
+        internal void EditListing()
+        {
+            edit.Click();
+        }
+
+        internal void DeleteListing()
+        {
+            delete.Click();
+            YesBtn.Click();
+        }
+
     }
 }

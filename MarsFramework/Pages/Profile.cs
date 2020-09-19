@@ -65,7 +65,7 @@ namespace MarsFramework
         private IWebElement ChooseLangOpt { get; set; }
 
         //Add Language
-        [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[3]/div/div[2]/div/div/div[3]/input[1]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='account-profile-section']/div/section[2]/div/div/div/div[3]/form/div[2]/div/div[2]/div/table/thead/tr/th[3]/div")]
         private IWebElement AddLang { get; set; }
 
         //Click on Add new to add new skill
@@ -160,11 +160,24 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[8]/div/div[4]/span/button[1]")]
         private IWebElement Save { get; set; }
 
+        //Finding the ShareSkill Button
+        [FindsBy(How = How.XPath, Using = "//*[@id='account-profile-section']/div/section[1]/div/div[2]/a")]
+        private IWebElement ShareSkillBtn { get; set; }
+
+        //Finding the ManageListing Button
+        [FindsBy(How = How.XPath, Using = "//*[@id='account-profile-section']/div/section[1]/div/a[3]")]
+        private IWebElement ManageListingBtn { get; set; }
+
         #endregion
 
-        internal void EditProfile()
+        internal void GoToShareSkill()
         {
+            ShareSkillBtn.Click();
+        }
 
+        internal void GoToManageListing()
+        {
+            ManageListingBtn.Click();
         }
     }
 }

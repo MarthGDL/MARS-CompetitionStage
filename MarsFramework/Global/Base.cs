@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using RelevantCodes.ExtentReports;
 using System;
+using System.Threading;
 using static MarsFramework.Global.GlobalDefinitions;
 
 namespace MarsFramework.Global
@@ -14,7 +15,7 @@ namespace MarsFramework.Global
         #region To access Path from resource file
 
         public static int Browser = Int32.Parse(MarsResource.Browser);
-        public static String ExcelPath = MarsResource.ExcelPath;
+        public static string ExcelPath = MarsResource.ExcelPath;
         public static string ScreenshotPath = MarsResource.ScreenShotPath;
         public static string ReportPath = MarsResource.ReportPath;
         #endregion
@@ -25,7 +26,7 @@ namespace MarsFramework.Global
         #endregion
 
         #region setup and tear down
-        [SetUp]
+        [OneTimeSetUp]
         public void Inititalize()
         {
 
@@ -43,6 +44,9 @@ namespace MarsFramework.Global
             }
             GlobalDefinitions.driver.Navigate().GoToUrl("http://192.168.99.100:5000/");
 
+            SignIn SignInPage = new SignIn();
+            SignInPage.LoginSteps();
+
             #region Initialise Reports
 
             extent = new ExtentReports(ReportPath, false, DisplayOrder.NewestFirst);
@@ -50,6 +54,7 @@ namespace MarsFramework.Global
 
             #endregion
 
+            /*
             if (MarsResource.IsLogin == "true")
             {
                 SignIn loginobj = new SignIn();
@@ -60,11 +65,22 @@ namespace MarsFramework.Global
                 SignUp obj = new SignUp();
                 obj.register();
             }
+            */
 
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            //Sends the test to the Start Page
+            if (GlobalDefinitions.driver.Url!= "http://192.168.99.100:5000/") 
+            {
+                GlobalDefinitions.driver.Navigate().GoToUrl("http://192.168.99.100:5000/Account/Profile");
+                Thread.Sleep(1000);
+            }
+        }
 
-        [TearDown]
+            [TearDown]
         public void TearDown()
         {
             // Screenshot
@@ -74,7 +90,12 @@ namespace MarsFramework.Global
             //extent.EndTest(test);
             // calling Flush writes everything to the log file (Reports)
             //extent.Flush();
-            // Close the driver :)            
+        }
+
+        [OneTimeTearDown]
+        public void EndTesting()
+        {
+            // Close the driver            
             //GlobalDefinitions.driver.Close();
             //GlobalDefinitions.driver.Quit();
         }
