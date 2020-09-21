@@ -1,6 +1,8 @@
 ﻿using MarsFramework.Global;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework.Pages
 {
@@ -8,7 +10,8 @@ namespace MarsFramework.Pages
     {
         public ManageListings()
         {
-            PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
+            Thread.Sleep(5000);
+            PageFactory.InitElements(GlobalDefinitions.driver, this);
         }
 
         #region Initialize WebElements
@@ -40,15 +43,19 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "/html/body/div[2]/div/div[3]/button[1]")]
         private IWebElement NoBtn { get; set; }
 
+        //Skill Listing Title
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[3]")]
+        private IWebElement SkillTitle { get; set; }
+
+        //Skill Listing Description
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[4]")]
+        private IWebElement SkillDescription { get; set; }
+
+        //Last Skill Listing Card
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[last()]")]
+        private IWebElement LastSkillListing { get; set; }
+
         #endregion
-
-        internal void Listings()
-        {
-            //Populate the Excel Sheet
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "ManageListings");
-
-
-        }
 
         internal void EditListing()
         {
@@ -59,6 +66,43 @@ namespace MarsFramework.Pages
         {
             delete.Click();
             YesBtn.Click();
+        }
+
+        internal void CheckListing(int DataRow)
+        {
+            //Creates a bool to determine the check result
+            bool CheckResult = true;
+
+            //Prepares the Excel Sheet
+            GlobalDefinitions.PopulateInCollection(Base.ExcelPath, "ShareSkill");
+
+            //Compares the listing data
+            if (SkillDescription.Text != GlobalDefinitions.ReadData(DataRow, "Description")) { CheckResult = false; }
+
+            //Asserts the test base on the Check Result
+            if (CheckResult==true)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+
+        }
+
+        internal void CompareLastEntry()
+        {
+           //Creates a new Web Element for the last() and compares it with the previous last
+            IWebElement NewLastEntry = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[last()]"));
+            if (LastSkillListing!= NewLastEntry) 
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
 
     }

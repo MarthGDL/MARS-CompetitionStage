@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework
 {
@@ -8,6 +9,7 @@ namespace MarsFramework
 
         public Profile()
         {
+            Thread.Sleep(5000);
             PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
         }
 

@@ -1,5 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using MarsFramework.Global;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework.Pages
 {
@@ -7,6 +9,7 @@ namespace MarsFramework.Pages
     {
         public ShareSkill()
         {
+            Thread.Sleep(3000);
             PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
         }
 
@@ -108,11 +111,13 @@ namespace MarsFramework.Pages
 
         #region Page Methods
 
-        internal void FillDetails()
+        internal void FillDetails(int DataRow)
         {
             //Enter text for the Share Skill details
-            Title.SendKeys("TitleText");
-            Description.SendKeys("DescriptionText");
+            Title.Clear();
+            Title.SendKeys(GlobalDefinitions.ReadData(DataRow, "Title"));
+            Description.Clear();
+            Description.SendKeys(GlobalDefinitions.ReadData(DataRow, "Description"));
 
             //Selects Categories using the dropdown list
             CategoryDropDown.Click();
@@ -121,22 +126,24 @@ namespace MarsFramework.Pages
             SubCategoryDropDown.SendKeys(Keys.ArrowDown + Keys.Enter);
 
             //Creates a Tag by entering text and pressing enter
-            Tags.SendKeys("Tag" + Keys.Enter);
+            Tags.SendKeys(GlobalDefinitions.ReadData(DataRow, "Tag") + Keys.Enter);
 
             //Sets the Service and Location options
             ServiceTypeOptions.Click();
             LocationTypeOption.Click();
         }
 
-        internal void FillSchedrule()
+        internal void FillSchedrule(int DataRow)
         {
             //Open the StartDate DropDown list and enter a value
             StartDateDropDown.Click();
-            StartDateDropDown.SendKeys("19/12/2020");
+            StartDateDropDown.Clear();
+            StartDateDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "StartDate"));
 
             //Open the EndDate DropDown list and enter a value
             EndDateDropDown.Click();
-            EndDateDropDown.SendKeys("25/03/2021");
+            EndDateDropDown.Clear();
+            EndDateDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "EndDate"));
 
             //Checks the boxes for Monday to Friday
             MondayBox.Click();
@@ -151,7 +158,8 @@ namespace MarsFramework.Pages
 
             //Selects a Skill trade option and fills its value
             SkillTradeCreditsOption.Click();
-            CreditAmount.SendKeys("5.50");
+            CreditAmount.Clear();
+            CreditAmount.SendKeys(GlobalDefinitions.ReadData(2, "Credit"));
 
             //Sets the "Active" option to hidden
             ActiveOption.Click();
@@ -160,21 +168,15 @@ namespace MarsFramework.Pages
         #endregion
 
 
-        internal void AddShareSkill()
+        internal void FillShareSkill(int DataRow)
         {
-            FillDetails();
-            FillSchedrule();
+            //Prepares the Excel Sheet
+            GlobalDefinitions.PopulateInCollection(Base.ExcelPath, "ShareSkill");
+
+            //Fills the form and saves
+            FillDetails(DataRow);
+            FillSchedrule(DataRow);
             Save.Click();
-        }
-
-        internal void EditShareSkill()
-        {
-
-        }
-
-        internal void DeleteShareSkill()
-        {
-
         }
 
     }
