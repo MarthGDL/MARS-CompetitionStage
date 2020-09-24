@@ -88,7 +88,7 @@ namespace MarsFramework.Pages
         private IWebElement SkillTradeExchangeOption { get; set; }
 
         //Skill Exchange textfield
-        [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[4]/div[1]/div/div/div/div/input")]
         private IWebElement SkillExchange { get; set; }
 
         //Skill Trade "Credits" option
@@ -115,57 +115,85 @@ namespace MarsFramework.Pages
 
         #region Page Methods
 
-        internal void FillDetails(int DataRow)
+        internal void EnterText(int DataRow)
         {
-            //Enter text for the Share Skill details
+            //Check if the user is able to Enter Text in the "Title" field
             Title.Clear();
             Title.SendKeys(GlobalDefinitions.ReadData(DataRow, "Title"));
+
+            //Check if the user is able to Enter Text in the "Description" field
             Description.Clear();
             Description.SendKeys(GlobalDefinitions.ReadData(DataRow, "Description"));
 
-            //Selects Categories using the dropdown list
+        }
+
+        internal void EditOptions(int DataRow)
+        {
+            //Check if the user is able to Click on the "Skill Exchange" option
+            SkillTradeExchangeOption.Click();
+
+            //Check if the user is able to create a tag for the "Skill Exchange" field
+            SkillExchange.SendKeys(GlobalDefinitions.ReadData(DataRow, "SkillExchange") + Keys.Enter);
+        }
+
+        internal void FillDetails(int DataRow)
+        {
+            //Check if the user is able to Enter Text in the "Title" field
+            EnterText(DataRow);
+
+            //Check if the user is able to "Click" on the "Category" dropdown list
             CategoryDropDown.Click();
             CategoryDropDown.SendKeys(Keys.ArrowDown + Keys.Enter);
+
+            //Check if the user is able to "Click" on the "SubCategory" dropdown list
             SubCategoryDropDown.Click();
             SubCategoryDropDown.SendKeys(Keys.ArrowDown + Keys.Enter);
 
-            //Creates a Tag by entering text and pressing enter
+            //Check if the user is able to "Enter" a "Tag"
             Tags.SendKeys(GlobalDefinitions.ReadData(DataRow, "Tag") + Keys.Enter);
 
-            //Sets the Service and Location options
+            //Check if the user is able to "Click" on a "Service Type" option
             ServiceTypeOptions.Click();
+
+            //Check if the user is able to "Click" on a "Location Type" option
             LocationTypeOption.Click();
         }
 
         internal void FillSchedrule(int DataRow)
         {
-            //Open the StartDate DropDown list and enter a value
+            //Check if the user is able to click on a "Start Date" for the "Available days" field
             StartDateDropDown.Click();
             StartDateDropDown.Clear();
             StartDateDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "StartDate"));
 
-            //Open the EndDate DropDown list and enter a value
+            //Check if the user is able to click on a "End Date" for the "Available days" field
             EndDateDropDown.Click();
             EndDateDropDown.Clear();
             EndDateDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "EndDate"));
 
-            //Checks the boxes for Monday to Friday
+            //Check if the user is able to click on a "Day" checkbox for the "Available days" field
             MondayBox.Click();
             TuesdayBox.Click();
             WednesdayBox.Click();
             ThursdayBox.Click();
             FridayBox.Click();
 
-            //Sets StartTime and EndTime with the Dropdown list
-            StartTimeDropDown.Click();
-            EndTimeDropDown.Click();
+            //Check if the user is able to select a "Start Time" for the "Available days" field
+            //StartTimeDropDown.Click();
+            StartTimeDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "StartTime"));
 
-            //Selects a Skill trade option and fills its value
+            //Check if the user is able to select a "End Time" for the "Available days" field
+            //EndTimeDropDown.Click();
+            EndTimeDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "EndTime"));
+
+            //Check if the user is able to click on "Credits" as the "Skill Trade" option
             SkillTradeCreditsOption.Click();
+
+            //Check if the user is able to enter a number for the "Credits" field
             CreditAmount.Clear();
             CreditAmount.SendKeys(GlobalDefinitions.ReadData(DataRow, "Credit"));
 
-            //Sets the "Active" option to hidden
+            //Check if the user is able to set an option for the "Active" field
             ActiveOption.Click();
 
         }
@@ -178,23 +206,31 @@ namespace MarsFramework.Pages
             //Prepares the Excel Sheet
             GlobalDefinitions.PopulateInCollection(Base.ExcelPath, "ShareSkill");
 
-            //Fills the form and saves
+            //Fills the form
             FillDetails(DataRow);
             FillSchedrule(DataRow);
-            UploadWorkSample(DataRow);
+
+            //Check if the user is able to load a file in the "Work Sample" field
+            //WorkSample.SendKeys(GlobalDefinitions.ReadData(DataRow, "FilePath"));
+
+            //Check if the user can Click on the "Save" button
             Save.Click();
         }
 
-        internal void UploadWorkSample(int DataRow)
+        internal void EditShareSkill(int DataRow)
         {
-            //Click on the WorkSample Image to open the file explorer
-            //WorkSample.Click();
+            //Prepares the Excel Sheet
+            GlobalDefinitions.PopulateInCollection(Base.ExcelPath, "ShareSkill");
 
-            //Enter the file path
-            WorkSample.SendKeys(GlobalDefinitions.ReadData(2, "FilePath"));
+            //Edit the form
+            EnterText(DataRow);
 
+            //Edit the Trade option
+            EditOptions(DataRow);
+
+            //Check if the user can Click on the "Save" button
+            Save.Click();
         }
-
 
     }
 }

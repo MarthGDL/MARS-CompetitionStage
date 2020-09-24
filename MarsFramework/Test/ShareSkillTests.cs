@@ -42,7 +42,7 @@ namespace MarsFramework.Test
 
                 //Check if the user is able to fill the Edit "Share-Skill" details
                 ShareSkill ShareSkillPage = new ShareSkill();
-                ShareSkillPage.FillShareSkill(3);
+                ShareSkillPage.EditShareSkill(3);
 
                 //Check if the changes can be seen in the "Manage Listage
                 ManageListings CheckListPage =new ManageListings();
