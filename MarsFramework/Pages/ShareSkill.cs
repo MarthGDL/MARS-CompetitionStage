@@ -103,6 +103,10 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//form/div[10]/div[@class='twelve wide column']/div/div[@class = 'field']")]
         private IWebElement ActiveOption { get; set; }
 
+        //WorkSample
+        [FindsBy(How = How.XPath, Using = "//*[@id='selectFile']")]
+        private IWebElement WorkSample { get; set; }
+
         //Click on Save button
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
@@ -159,10 +163,11 @@ namespace MarsFramework.Pages
             //Selects a Skill trade option and fills its value
             SkillTradeCreditsOption.Click();
             CreditAmount.Clear();
-            CreditAmount.SendKeys(GlobalDefinitions.ReadData(2, "Credit"));
+            CreditAmount.SendKeys(GlobalDefinitions.ReadData(DataRow, "Credit"));
 
             //Sets the "Active" option to hidden
             ActiveOption.Click();
+
         }
 
         #endregion
@@ -176,8 +181,20 @@ namespace MarsFramework.Pages
             //Fills the form and saves
             FillDetails(DataRow);
             FillSchedrule(DataRow);
+            UploadWorkSample(DataRow);
             Save.Click();
         }
+
+        internal void UploadWorkSample(int DataRow)
+        {
+            //Click on the WorkSample Image to open the file explorer
+            //WorkSample.Click();
+
+            //Enter the file path
+            WorkSample.SendKeys(GlobalDefinitions.ReadData(2, "FilePath"));
+
+        }
+
 
     }
 }
