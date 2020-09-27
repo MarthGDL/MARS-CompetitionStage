@@ -93,7 +93,7 @@ namespace MarsFramework.Pages
 
         internal void CompareLastEntry()
         {
-           //Creates a new Web Element for the last() and compares it with the previous last
+            //Creates a new Web Element for the last() listed element and compares it with the previous last element
             IWebElement NewLastEntry = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[last()]"));
             if (LastSkillListing!= NewLastEntry) 
             {

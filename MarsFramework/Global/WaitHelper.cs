@@ -7,6 +7,7 @@ namespace MarsFramework.Global
 {
     class WaitHelper
     {
+        
         public static void WaitClickble(IWebDriver driver, IWebElement element)
         {
             try

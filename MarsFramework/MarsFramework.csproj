@@ -122,10 +122,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MarsResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Global\AutoIt.cs" />
     <Compile Include="Global\Base.cs" />
     <Compile Include="Global\GlobalDefinitions.cs" />
     <Compile Include="Global\WaitHelper.cs" />
     <Compile Include="Pages\ManageListings.cs" />
+    <Compile Include="Pages\ServiceDetail.cs" />
     <Compile Include="Pages\ShareSkill.cs" />
     <Compile Include="Pages\SignIn.cs" />
     <Compile Include="Pages\SignUp.cs" />
@@ -148,6 +150,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XMLFile.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AutoItX3Lib">
+      <Guid>{F8937E53-D444-4E71-9275-35B64210CC3B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>True</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

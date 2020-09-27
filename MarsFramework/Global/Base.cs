@@ -95,7 +95,7 @@ namespace MarsFramework.Global
         [OneTimeTearDown]
         public void EndTesting()
         {
-            // Close the driver            
+            //Close the driver            
             //GlobalDefinitions.driver.Close();
             //GlobalDefinitions.driver.Quit();
         }

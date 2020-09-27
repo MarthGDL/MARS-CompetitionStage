@@ -2,6 +2,8 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using System.Threading;
+using System.Net;
+using System.Collections.Generic;
 
 namespace MarsFramework.Pages
 {
@@ -51,29 +53,9 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[1]/div[4]/input")]
         private IWebElement EndDateDropDown { get; set; }
 
-        //Table of available days
-        [FindsBy(How = How.XPath, Using = "//body/div/div/div[@id='service-listing-section']/div[@class='ui container']/div[@class='listing']/form[@class='ui form']/div[7]/div[2]/div[1]")]
-        private IWebElement Days { get; set; }
-
-        //Monday Box
-        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[3]/div[1]/div/input")]
-        private IWebElement MondayBox { get; set; }
-
-        //Tuesday Box
-        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[4]/div[1]/div/input")]
-        private IWebElement TuesdayBox { get; set; }
-
-        //Wednesday Box
-        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[5]/div[1]/div/input")]
-        private IWebElement WednesdayBox { get; set; }
-
-        //Thursday Box
-        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[6]/div[1]/div/input")]
-        private IWebElement ThursdayBox { get; set; }
-
-        //Friday Box
-        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[7]/div[1]/div/input")]
-        private IWebElement FridayBox { get; set; }
+        //List of available days
+        [FindsBy(How = How.XPath, Using = "//input[@type='checkbox']")]
+        private IList<IWebElement> Days { get; set; }
 
         //StartTime dropdown
         [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
@@ -104,7 +86,7 @@ namespace MarsFramework.Pages
         private IWebElement ActiveOption { get; set; }
 
         //WorkSample
-        [FindsBy(How = How.XPath, Using = "//*[@id='selectFile']")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[9]/div/div[2]/section/div/label/div/span")]
         private IWebElement WorkSample { get; set; }
 
         //Click on Save button
@@ -172,18 +154,15 @@ namespace MarsFramework.Pages
             EndDateDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "EndDate"));
 
             //Check if the user is able to click on a "Day" checkbox for the "Available days" field
-            MondayBox.Click();
-            TuesdayBox.Click();
-            WednesdayBox.Click();
-            ThursdayBox.Click();
-            FridayBox.Click();
+            for (var i=1;i<=5;i++)
+            {
+                Days[i].Click();
+            }
 
             //Check if the user is able to select a "Start Time" for the "Available days" field
-            //StartTimeDropDown.Click();
             StartTimeDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "StartTime"));
 
             //Check if the user is able to select a "End Time" for the "Available days" field
-            //EndTimeDropDown.Click();
             EndTimeDropDown.SendKeys(GlobalDefinitions.ReadData(DataRow, "EndTime"));
 
             //Check if the user is able to click on "Credits" as the "Skill Trade" option
@@ -195,6 +174,16 @@ namespace MarsFramework.Pages
 
             //Check if the user is able to set an option for the "Active" field
             ActiveOption.Click();
+
+        }
+
+        internal void UploadSample(int DataRow)
+        {
+            //Click on Upload Sample File
+            WorkSample.Click();
+
+            //Uses AutoIt to handle the file explorer
+            AutoIt.UploadFile(GlobalDefinitions.ReadData(DataRow, "FilePath"));
 
         }
 
@@ -211,7 +200,7 @@ namespace MarsFramework.Pages
             FillSchedrule(DataRow);
 
             //Check if the user is able to load a file in the "Work Sample" field
-            //WorkSample.SendKeys(GlobalDefinitions.ReadData(DataRow, "FilePath"));
+            UploadSample(DataRow);
 
             //Check if the user can Click on the "Save" button
             Save.Click();
